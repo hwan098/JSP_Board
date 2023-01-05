@@ -1,16 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="user.UserDAO"%>
+<%@page import="bbs.BbsDAO"%>
 <%@page import="java.io.PrintWriter"%>
 <!-- 자바스크립트를 사용하기 위해 -->
 <% request.setCharacterEncoding("UTF-8"); %>
 <!-- 넘어오는 데이터를 utf-8로 받을 수 있도록 함 -->
-<jsp:useBean id="user" class="user.User" scope="page" />
-<jsp:setProperty name="user" property="userID" />
-<jsp:setProperty name="user" property="userPassword" />
-<jsp:setProperty name="user" property="userName" />
-<jsp:setProperty name="user" property="userGender" />
-<jsp:setProperty name="user" property="userEmail" />
+<jsp:useBean id="bbs" class="bbs.Bbs" scope="page" />
+<jsp:setProperty name="bbs" property="bbsTitle" />
+<jsp:setProperty name="bbs" property="bbsContent" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,38 +21,39 @@
 		if(session.getAttribute("userID") != null){
 			userID = (String) session.getAttribute("userID");
 		}
-		if (userID != null){
+		//로그인이 안되어 있을 경우
+		if (userID == null){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
-			script.println("alelt('이미 로그인 되어있습니다.')");
-			script.println("location.href = 'main.jsp'");
+			script.println("alelt('로그인을 하세요.')");
+			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		}
-		
-		if(user.getUserID() == null || user.getUserPassword() == null || user.getUserName() == null 
-			|| user.getUserGender() == null || user.getUserEmail() == null){
+		//정보를 입력하지 않았을 경우
+		if(bbs.getBbsTitle() == null || bbs.getBbsContent() == null){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('입력이 안 된 사항이 있습니다.')");
 			script.println("history.back()"); //이전 페이지로 돌려보냄
 			script.println("</script>");
 		}
+		//글작성 입력까지 완료
 		else{
-			UserDAO userDAO = new UserDAO();
-			int result = userDAO.join(user);
-			//id는 기본키이다.
+			BbsDAO bbsDAO = new BbsDAO();
+			int result = bbsDAO.write(bbs.getBbsTitle(), userID, bbs.getBbsContent());
+			//데이터베이스 오류인 경우
 			if(result == -1){
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
-				script.println("alert('이미 사용중인 아이디입니다.')");
+				script.println("alert('글쓰기에 실패하였습니다.')");
+				script.println("history.back()");
 				script.println("</script>");
 			}
-			//회원가입이 된 경우
+			//글작성이 된 경우
 			else{
-				session.setAttribute("userID", user.getUserID());
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
-				script.println("location.href = 'main.jsp'");
+				script.println("location.href = 'bbs.jsp'");
 				script.println("</script>");
 			}
 		}
