@@ -15,7 +15,8 @@
 </head>
 <body>
 	<%	
-		String userID = null; //로그인이 된 사람들은 로그인 정보를 담을 수 있게 변수를 만들어줌
+	    //로그인이 된 사람들은 로그인 정보를 담을 수 있게 변수를 만들어줌
+		String userID = null; 
 		//현재 세션이 존재하는 사람이라면 그 아이디 값을 받아서 세션에 있는 값을 스트링형태로 받아옴
 		if(session.getAttribute("userID") != null){	
 			userID = (String) session.getAttribute("userID");
@@ -88,7 +89,23 @@
 					</tr>
 				</thead>
 				<tbody>
-					
+					<%  
+						BbsDAO bbsDAO = new BbsDAO();
+						//System.out.println(bbsDAO.getDate());
+						
+						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+						for(int i = 0; i < list.size(); i++){
+					%>
+					<tr>
+						<td><%= list.get(i).getBbsID() %></td>
+						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
+						<td><%= list.get(i).getUserID() %></td>
+						<td><%=list.get(i).getBbsDate()%></td>
+						
+					</tr>
+					<%
+						}
+					%>
 				</tbody>
 			</table>
 			<a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
