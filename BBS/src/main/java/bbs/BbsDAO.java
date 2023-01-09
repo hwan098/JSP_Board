@@ -35,21 +35,7 @@ public class BbsDAO {
         }
         return ""; // 데이터베이스 오류
     }
-/*	
-	public String getDate() {
-		String SQL = "SELECT NOW()";
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return rs.getString(1);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return "";	//DB오류
-	}
-*/
+
 	public int getNext() {
 		String SQL = "SELECT bbsID FROM BBS ORDER BY bbsID DESC";  //내림차순으로 마지막에 쓰인 글 번호 가져오기
 		try {
@@ -143,5 +129,20 @@ public class BbsDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		//특정한 id에 해당하는 제목과 내용을 수정한다
+		String SQL = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";  
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, bbsContent);
+			pstmt.setInt(3, bbsID);
+			return pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1;	//DB오류
 	}
 }
