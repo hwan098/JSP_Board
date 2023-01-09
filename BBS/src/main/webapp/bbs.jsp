@@ -96,14 +96,12 @@
 				<tbody>
 					<%  
 						BbsDAO bbsDAO = new BbsDAO();
-						//System.out.println(bbsDAO.getDate());
-						
 						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
 						for(int i = 0; i < list.size(); i++){
 					%>
 					<tr>
 						<td><%= list.get(i).getBbsID() %></td>
-						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
+						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID()%>"><%=list.get(i).getBbsTitle()%></a></td>
 						<td><%= list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBbsDate() %></td>
 						
@@ -116,11 +114,11 @@
 			<%
 				if(pageNumber != 1){
 			%>
-				<a href="bbs.jsp?pageNumber=<%=pageNumber - 1%>" class="btn btn-success btn-arrow-left">이전</a>
+					<a href="bbs.jsp?pageNumber=<%=pageNumber - 1%>" class="btn btn-success btn-arrow-left">이전</a>
 			<%
 				}if(bbsDAO.nextPage(pageNumber + 1)){
 			%>
-				<a href="bbs.jsp?pageNumber=<%=pageNumber + 1%>" class="btn btn-success btn-arrow-left">다음</a>
+					<a href="bbs.jsp?pageNumber=<%=pageNumber + 1%>" class="btn btn-success btn-arrow-left">다음</a>
 			<%
 				}
 			%>
