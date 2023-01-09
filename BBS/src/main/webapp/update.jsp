@@ -19,6 +19,7 @@
 		if(session.getAttribute("userID") != null){	
 			userID = (String) session.getAttribute("userID");
 		}
+		//
 		if(userID == null){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
@@ -26,10 +27,11 @@
 			script.println("location.href = 'bbs.jsp'");
 			script.println("</script>");
 		}
-		int bbsID = 0;
+		int bbsID = 0;	//정보를 담을 수 있게 빈 그릇을 만들어줌 
 		if(request.getParameter("bbsID") != null){
 			bbsID = Integer.parseInt(request.getParameter("bbsID"));
 		}
+		//수정하고자 하는 글의 bbsID값이 들어오지 않았을 경우
 		if(bbsID == 0){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
@@ -38,6 +40,7 @@
 			script.println("</script>");
 		}
 		Bbs bbs = new BbsDAO().getBbs(bbsID);
+		//실제로 글을 작성한 사람이 맞는지 확인: 세션에 있는 값과 글을 작성한 사람을 비교해서 다르다면 알림창 띄우기
 		if(!userID.equals(bbs.getUserID())){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
