@@ -19,7 +19,7 @@
 		if(session.getAttribute("userID") != null){	
 			userID = (String) session.getAttribute("userID");
 		}
-		//bbsID로 넘어온 매개변수가 존재한다면 
+		//bbsID로 넘어온 매개변수가 존재한다면 뷰페이지안의 bbsID안에 담아서 처리할 수 있게함
 		int bbsID = 0;
 		if(request.getParameter("bbsID") != null){
 			bbsID = Integer.parseInt(request.getParameter("bbsID"));
